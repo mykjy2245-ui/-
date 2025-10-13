@@ -1,0 +1,64 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+const int INF = 1000000000; // 무한을 나타내는 큰 값
+
+// 다익스트라 함수: 시작 정점 start로부터 최단 거리 계산
+void dijkstra(int V, const vector<vector<pair<int, int>>>& adj, int start, vector<int>& dist) {
+    vector<bool> visited(V, false); // 방문 여부 확인용
+    dist.assign(V, INF);            // 모든 거리 무한으로 초기화
+    dist[start] = 0;                // 시작 정점은 거리 0
+
+    for (int i = 0; i < V; ++i) {
+        // 방문하지 않은 정점 중 가장 가까운 정점 u 찾기
+        int u = -1;
+        for (int j = 0; j < V; ++j) {
+            if (!visited[j] && (u == -1 || dist[j] < dist[u])) {
+                u = j;
+            }
+        }
+
+        if (dist[u] == INF) break; // 도달할 수 없는 정점은 스킵
+        visited[u] = true;
+
+        // 정점 u에서 갈 수 있는 이웃들 거리 갱신
+        for (int j = 0; j < adj[u].size(); ++j) {
+            int v = adj[u][j].first;
+            int weight = adj[u][j].second;
+
+            if (dist[v] > dist[u] + weight) {
+                dist[v] = dist[u] + weight;
+            }
+        }
+    }
+}
+
+int main() {
+    int V = 6; // 정점 개수
+    vector<vector<pair<int, int>>> adj(V); // 인접 리스트
+
+    // 간선 추가 (무방향 그래프라면 양방향 모두 추가)
+    adj[0].push_back({ 1, 4 });
+    adj[0].push_back({ 2, 2 });
+    adj[1].push_back({ 2, 5 });
+    adj[1].push_back({ 3, 10 });
+    adj[2].push_back({ 4, 3 });
+    adj[4].push_back({ 3, 4 });
+    adj[3].push_back({ 5, 11 });
+
+    int start = 0; // 시작 정점
+    vector<int> dist; // 최단 거리 결과 저장
+
+    dijkstra(V, adj, start, dist);
+
+    // 결과 출력
+    cout << "정점 " << start << "로부터의 최단 거리:\n";
+    for (int i = 0; i < V; ++i) {
+        if (dist[i] == INF) cout << i << ": 도달 불가\n";
+        else cout << i << ": " << dist[i] << "\n";
+    }
+
+    return 0;
+}
