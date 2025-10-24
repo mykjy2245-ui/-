@@ -1,0 +1,17 @@
+#include <iostream>
+#include <string>
+
+int main() {
+    std::string str = "Hello, World!";
+
+    std::cout << "문자열 길이: " << str.size() << std::endl;
+
+    std::string sub = str.substr(7, 5);
+    std::cout << "부분 문자열: " << sub << std::endl;
+
+    size_t pos = str.find("World");
+    if (pos != std::string::npos)
+        std::cout << "'World' 위치: " << pos << std::endl;
+
+    return 0;
+}
